@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Contilio Three.js Code Challenge</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+<script>
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+
+    let renderer = new THREE.WebGLRenderer();
+    renderer.setSize(width, height);
+    document.body.appendChild(renderer.domElement);
+
+    let scene = new THREE.Scene();
+    let camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 10000);
+    camera.position.z = 75;
+    scene.add(camera);
+
+    let light = new THREE.PointLight(0xffffff);
+    light.position.set(-100, 200, 100);
+    scene.add(light);
+
+    let geometry = new THREE.BoxGeometry(0.75, 0.75, 0.75);
+    let material = new THREE.MeshNormalMaterial();
+    let mesh = new THREE.InstancedMesh(geometry, material, 30 * 30 * 30);
+    let matrix = new THREE.Matrix4();
+    let index = 0;
+    for (let x = 0; x < 30; x++) {
+        for (let y = 0; y < 30; y++) {
+            for (let z = 0; z < 30; z++) {
+                matrix.setPosition(x - 15, y - 15, z - 15);
+                mesh.setMatrixAt(index, matrix);
+                index++;
+            }
+        }
+    }
+    scene.add(mesh);
+
+    /*
+    This code is creating a 3D grid of cubes using Three.js. It starts by creating a box geometry with dimensions of 0.75x0.75x0.75. Then, it creates a normal material for the cubes.
+The main difference from the original code is that instead of creating individual mesh objects for each cube, it creates an InstancedMesh object. An InstancedMesh is a more efficient way to render multiple copies of the same mesh with different positions, rotations, and scales.
+The code then creates a matrix object to hold the position, rotation, and scale of each cube. It loops through the x, y, and z coordinates to set the position of each cube using the matrix object. It then adds the matrix to the InstancedMesh object at the specified index.
+Finally, the code adds the InstancedMesh object to the scene to be rendered. This approach is more efficient than creating individual mesh objects for each cube, as it reduces the number of draw calls needed to render the scene.
+*/
+
+    // let group = new THREE.Group();
+    // for (let x = 0; x < 30; x++) {
+    //     for (let y = 0; y < 30; y++) {
+    //         for (let z = 0; z < 30; z++) {
+    //             let geometry = new THREE.BoxGeometry(0.75, 0.75, 0.75);
+    //             let material = new THREE.MeshNormalMaterial();
+    //             let mesh = new THREE.Mesh(geometry, material);
+    //             mesh.position.set(x - 15, y - 15, z - 15);
+    //             group.add(mesh);
+    //         }
+    //     }
+    // }
+    //
+    // scene.add(group);
+
+    function resize() {
+        width = window.innerWidth;
+        height = window.innerHeight;
+        renderer.setSize(width, height);
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+    }
+
+    function animate() {
+        requestAnimationFrame(animate);
+        mesh.rotation.x += 0.002;
+        mesh.rotation.y += 0.004;
+        renderer.render(scene, camera);
+    }
+
+    resize();
+    animate();
+    window.addEventListener('resize', resize);
+</script>
+</body>
+</html>

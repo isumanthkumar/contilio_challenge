@@ -1,0 +1,41 @@
+.root {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr auto;
+    max-width: 1000px;
+    margin: auto;
+    padding: 16px;
+
+    .content {
+        display: flex;
+        /*flex-wrap: wrap; !* add this property to wrap the children *!*/
+
+        .table {
+            width: 50%;
+            margin: 10px;
+        }
+
+        .chart {
+            width: 50%;
+            margin: 10px;
+        }
+
+        .slider {
+            margin-top: 16px;
+        }
+    }
+
+    @media (max-width: 500px) {
+        /* modify the CSS for small screens */
+        .content {
+            flex-direction: column; /* change to column layout */
+            align-items: center; /* center the children horizontally */
+
+            .table,
+            .chart {
+                width: 100%; /* make the children full width */
+                margin: 5px 0; /* adjust the margin */
+            }
+        }
+    }
+}
